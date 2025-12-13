@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Hotel Booking System - Booking Management">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>F5 Hotel Booking System - Administrator</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Taviraj:300,400,500,600,700,800,900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/flaticon.css" type="text/css">
+    <link rel="stylesheet" href="css/linearicons.css" type="text/css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+
+    <style>
+        .data-table {
+            width: 100%;
+            background: white;
+            border-collapse: collapse;
+            margin-top: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-table thead {
+            background: #dfa974;
+            color: white;
+        }
+
+        .data-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .data-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            color: #333;
+        }
+
+        .data-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .status-pending {
+            background: #ffc107;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-confirmed {
+            background: #28a745;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-cancelled {
+            background: #dc3545;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            background: #6c757d;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 16px;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 16px;
+        }
+
+        .refresh-btn {
+            background: #dfa974;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .refresh-btn:hover {
+            background: #c79861;
+        }
+
+        .booking-count {
+            color: #dfa974;
+            font-weight: 600;
+        }
+
+        .action-btn {
+            background: #dfa974;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+            margin: 2px;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #c79861;
+        }
+
+        .action-btn-danger {
+            background: #dc3545;
+        }
+
+        .action-btn-danger:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <header class="header-section other-page">
+        <div class="container-fluid">
+            <div class="inner-header">
+                <div class="logo">
+                    <a href="./admin-dashboard.html" style="font-family: 'Taviraj', serif; font-size: 32px; font-weight: 700; color: #dfa974; text-decoration: none; text-transform: uppercase; letter-spacing: 3px;">F5 HOTEL</a>
+                </div>
+                <div class="top-widget">
+                    <div class="top-info address">
+                        <span id="adminNameHeader">Administrator</span>
+                    </div>
+                    <div class="top-info">
+                        <a href="#" id="logoutBtn" style="color: #dfa974; text-decoration: none; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 600;">Logout</a>
+                    </div>
+                </div>
+                <div class="container">
+                    <nav class="main-menu mobile-menu">
+                        <ul>
+                            <li><a href="./admin-dashboard.html">Dashboard</a></li>
+                            <li><a href="./admin-users.html">Users</a></li>
+                            <li class="active"><a href="./admin-bookings.html">Bookings</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div id="mobile-menu-wrap"></div>
+            </div>
+        </div>
+    </header>
+    <!-- Header End -->
+
+    <br><br><br>
+
+
+    <!-- Bookings Content Begin -->
+    <section class="room-availability spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h1>Booking Management</h1>
+                        <p>View and manage all hotel bookings <span class="booking-count" id="bookingCount"></span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <button class="refresh-btn" onclick="loadBookings()">
+                        <i class="fa fa-refresh"></i> Refresh Bookings
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="bookingsTableContainer">
+                        <div class="loading">
+                            <i class="fa fa-spinner fa-spin"></i> Loading bookings...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Bookings Content End -->
+
+    <!-- Footer Section Begin -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="footer-logo">
+                        <a href="#" style="font-family: 'Taviraj', serif; font-size: 28px; font-weight: 700; color: #dfa974; text-decoration: none; text-transform: uppercase; letter-spacing: 3px;">F5 HOTEL</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row pb-50">
+                <div class="col-lg-4 col-sm-6">
+                    <div class="single-footer-widget">
+                        <h5>Location</h5>
+                        <div class="widget-text">
+                            <i class="lnr lnr-map-marker"></i>
+                            <p>Ayala Center, San Lorenzo, Makati City, Metro Manila, 1223</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="single-footer-widget">
+                        <h5>Reception</h5>
+                        <div class="widget-text">
+                            <i class="lnr lnr-phone-handset"></i>
+                            <p>+63 2 8354 7219</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="single-footer-widget">
+                        <h5>Shuttle Service</h5>
+                        <div class="widget-text">
+                            <i class="lnr lnr-phone-handset"></i>
+                            <p>+63 917 842 5593</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright-area">
+            <div class="container">
+                <div class="copyright-text">
+                    <center>Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | F5 Hotel</center>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Js Plugins -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        // Check if admin is logged in
+        function checkAdminAuth() {
+            const adminLoggedIn = sessionStorage.getItem('adminLoggedIn');
+            const adminToken = localStorage.getItem('adminAuthToken');
+            
+            if (!adminLoggedIn || !adminToken) {
+                alert('Unauthorized access. Please login as administrator.');
+                window.location.href = 'adminlogin.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Logout function
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('adminAuthToken');
+                localStorage.removeItem('adminData');
+                sessionStorage.removeItem('adminLoggedIn');
+                sessionStorage.removeItem('adminUsername');
+                window.location.href = 'adminlogin.html';
+            }
+        });
+
+        // Load admin data
+        function loadAdminData() {
+            const adminData = localStorage.getItem('adminData');
+            if (adminData) {
+                try {
+                    const admin = JSON.parse(adminData);
+                    document.getElementById('adminNameHeader').textContent = admin.firstName + ' ' + admin.lastName;
+                } catch (e) {
+                    document.getElementById('adminNameHeader').textContent = 'Administrator';
+                }
+            }
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric'
+            });
+        }
+
+        // Fetch bookings
+        async function loadBookings() {
+            const token = localStorage.getItem('adminAuthToken');
+            const container = document.getElementById('bookingsTableContainer');
+
+            container.innerHTML = '<div class="loading"><i class="fa fa-spinner fa-spin"></i> Loading bookings...</div>';
+
+            try {
+                // Replace with your actual API endpoint
+                const response = await fetch('/api/bookings', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    displayBookings(data.bookings);
+                } else {
+                    // If API doesn't exist yet, show sample data
+                    displayBookings(getSampleBookings());
+                }
+            } catch (error) {
+                console.error('Error fetching bookings:', error);
+                // Show sample data if API is not available
+                displayBookings(getSampleBookings());
+            }
+        }
+
+        // Sample bookings data (remove this when you have real API)
+        function getSampleBookings() {
+            return [
+                {
+                    id: 1,
+                    guestName: 'John Doe',
+                    email: 'john@example.com',
+                    roomType: 'Junior Suite',
+                    checkIn: '2024-12-15',
+                    checkOut: '2024-12-18',
+                    guests: 2,
+                    status: 'confirmed',
+                    total: '₱24,000',
+                    bookingDate: '2024-12-01'
+                },
+                {
+                    id: 2,
+                    guestName: 'Jane Smith',
+                    email: 'jane@example.com',
+                    roomType: 'Deluxe Room',
+                    checkIn: '2024-12-20',
+                    checkOut: '2024-12-22',
+                    guests: 1,
+                    status: 'pending',
+                    total: '₱12,000',
+                    bookingDate: '2024-12-05'
+                },
+                {
+                    id: 3,
+                    guestName: 'Robert Johnson',
+                    email: 'robert@example.com',
+                    roomType: 'Executive Suite',
+                    checkIn: '2024-12-10',
+                    checkOut: '2024-12-12',
+                    guests: 2,
+                    status: 'completed',
+                    total: '₱30,000',
+                    bookingDate: '2024-11-25'
+                },
+                {
+                    id: 4,
+                    guestName: 'Maria Garcia',
+                    email: 'maria@example.com',
+                    roomType: 'Standard Room',
+                    checkIn: '2024-12-25',
+                    checkOut: '2024-12-28',
+                    guests: 3,
+                    status: 'confirmed',
+                    total: '₱18,000',
+                    bookingDate: '2024-12-08'
+                }
+            ];
+        }
+
+        // Display bookings in table
+        function displayBookings(bookings) {
+            const container = document.getElementById('bookingsTableContainer');
+            
+            if (!bookings || bookings.length === 0) {
+                container.innerHTML = '<div class="no-data">No bookings found</div>';
+                document.getElementById('bookingCount').textContent = '(0 bookings)';
+                return;
+            }
+
+            document.getElementById('bookingCount').textContent = `(${bookings.length} bookings)`;
+
+            let tableHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Guest Name</th>
+                            <th>Email</th>
+                            <th>Room Type</th>
+                            <th>Check-In</th>
+                            <th>Check-Out</th>
+                            <th>Guests</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Booking Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            bookings.forEach((booking, index) => {
+                let statusTag = '';
+                if (booking.status === 'confirmed') {
+                    statusTag = '<span class="status-confirmed">CONFIRMED</span>';
+                } else if (booking.status === 'pending') {
+                    statusTag = '<span class="status-pending">PENDING</span>';
+                } else if (booking.status === 'completed') {
+                    statusTag = '<span class="status-completed">COMPLETED</span>';
+                } else {
+                    statusTag = '<span class="status-cancelled">CANCELLED</span>';
+                }
+                
+                tableHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><strong>${booking.guestName}</strong></td>
+                        <td>${booking.email}</td>
+                        <td>${booking.roomType}</td>
+                        <td>${formatDate(booking.checkIn)}</td>
+                        <td>${formatDate(booking.checkOut)}</td>
+                        <td>${booking.guests}</td>
+                        <td>${booking.total}</td>
+                        <td>${statusTag}</td>
+                        <td>${formatDate(booking.bookingDate)}</td>
+                        <td>
+                            <button class="action-btn" onclick="viewBooking(${booking.id})">
+                                <i class="fa fa-eye"></i> View
+                            </button>
+                            ${booking.status === 'pending' ? `
+                                <button class="action-btn" onclick="confirmBooking(${booking.id})">
+                                    <i class="fa fa-check"></i> Confirm
+                                </button>
+                            ` : ''}
+                            ${booking.status !== 'completed' && booking.status !== 'cancelled' ? `
+                                <button class="action-btn action-btn-danger" onclick="cancelBooking(${booking.id})">
+                                    <i class="fa fa-times"></i> Cancel
+                                </button>
+                            ` : ''}
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            container.innerHTML = tableHTML;
+        }
+
+        // Booking actions (implement based on your API)
+        function viewBooking(id) {
+            alert('View booking details for ID: ' + id + '\n\nImplement this based on your requirements.');
+        }
+
+        function confirmBooking(id) {
+            if (confirm('Confirm this booking?')) {
+                alert('Booking confirmed! Implement API call here.');
+                loadBookings();
+            }
+        }
+
+        function cancelBooking(id) {
+            if (confirm('Are you sure you want to cancel this booking?')) {
+                alert('Booking cancelled! Implement API call here.');
+                loadBookings();
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkAdminAuth()) {
+                loadAdminData();
+                loadBookings();
+            }
+        });
+    </script>
+</body>
+
+</html>

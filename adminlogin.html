@@ -3,10 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Hotel Booking System">
+    <meta name="description" content="Hotel Booking System - Admin Login">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>F5 Hotel Booking System</title>
+    <title>F5 Hotel Booking System - Admin Access</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Taviraj:300,400,500,600,700,800,900&display=swap"
@@ -21,51 +21,61 @@
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <link rel="stylesheet" href="css/login.css" type="text/css">
 
+    <style>
+        .admin-badge {
+            background: #dfa974;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .admin-badge i {
+            margin-right: 6px;
+        }
+    </style>
+
 </head>
 
 <body>
     <div class="login-container">
         <div class="logo">
-                    <center><a href="./home.html" style="font-family: 'Taviraj', serif; font-size: 60px; font-weight: 700; color: #dfa974; text-decoration: none; text-transform: uppercase; letter-spacing: 3px;">F5 HOTEL</a></center>
-                </div>
+            <center><a href="./home.html" style="font-family: 'Taviraj', serif; font-size: 60px; font-weight: 700; color: #dfa974; text-decoration: none; text-transform: uppercase; letter-spacing: 3px;">F5 HOTEL</a></center>
+        </div>
 
-        <p class="login-title">Where Every Stay Counts!</p>
-        <p class="login-subtitle">Please login to your account</p>
+        <div style="text-align: center;">
+            <span class="admin-badge"><i class="fa fa-shield"></i> Admin Access</span>
+        </div>
 
-        <form id="loginForm">
+        <p class="login-title">Administrator Dashboard</p>
+        <p class="login-subtitle">Please login to your admin account</p>
+
+        <form id="adminLoginForm">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                <input type="text" id="username" name="username" placeholder="Enter your admin username" required>
                 <span class="error-message" id="usernameError">Please enter your username</span>
             </div>
 
-            <div class="form-group password-group">
+            <div class="form-group">
                 <label for="password">Password</label>
-                <div class="password-input-wrapper">
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                    <button type="button" class="toggle-password" id="togglePassword">
-                        <i class="fa fa-eye"></i>
-                    </button>
-                </div>
+                <input type="password" id="password" name="password" placeholder="Enter your admin password" required>
                 <span class="error-message" id="passwordError">Please enter your password</span>
             </div>
 
-            <button type="submit" class="login-btn">Login</button>
-
-            <div class="divider">
-                <span>or</span>
-            </div>
-
-            <div class="create-account-link">
-                Don't have an account? <a href="signup.html">Create Account</a>
-            </div>
+            <button type="submit" class="login-btn">Admin Login</button>
         </form>
     </div>
 
     <!-- Js Plugins -->
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/login.js"></script>
+    <script src="js/adminlogin.js"></script>
 
 </body>
 

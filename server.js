@@ -53,6 +53,6 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`✓ Server running on http://localhost:${PORT}`);
-    console.log(`✓ Frontend: http://localhost:${PORT}/home.html`);
+    console.log(`✓ Frontend: http://localhost:${PORT}/login.html`);
     console.log(`✓ API: http://localhost:${PORT}/api/auth`);
 });

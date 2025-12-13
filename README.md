@@ -75,15 +75,15 @@ f5-hotel/
 - **Body:**
 ```json
 {
-  "firstName": "John",
-  "middleName": "M",
-  "lastName": "Doe",
-  "dateOfBirth": "1990-01-01",
-  "email": "john@example.com",
-  "contactNumber": "1234567890",
-  "username": "johndoe",
-  "password": "password123"
+    "firstName": "Admin",
+    "lastName": "User",
+    "dateOfBirth": "1990-01-01",
+    "email": "admin@gmail.com",
+    "contactNumber": "09123456789",
+    "username": "AdminUser",
+    "password": "admin12345"
 }
+
 ```
 - **Response:**
 ```json
@@ -100,9 +100,9 @@ f5-hotel/
 - **Body:**
 ```json
 {
-  "email": "john@example.com",
-  "username": "johndoe",
-  "password": "password123"
+    "email": "admin@gmail.com",
+    "username": "AdminUser",
+    "password": "admin12345"
 }
 ```
 - **Response:**
@@ -115,8 +115,43 @@ f5-hotel/
 }
 ```
 
-#### 3. Get User Profile
-- **URL:** `GET /api/auth/profile`
+#### 3. Admin Login
+- **URL:** `POST /api/auth/admin-login`
+- **Body:**
+```json
+{
+    "username": "AdminUser",
+    "password": "admin12345"
+}
+```
+- **Response (Success):**
+```json
+{
+  "success": true,
+  "message": "Admin login successful",
+  "token": "jwt_token_here",
+  "user": {
+    "id": "...",
+    "username": "AdminUser",
+    "email": "admin@gmail.com",
+    "firstName": "Admin",
+    "lastName": "User",
+    "isAdmin": true
+  }
+}
+```
+- **Response (Non-Admin User):**
+```json
+{
+  "success": false,
+  "message": "Access denied. Admin privileges required."
+}
+```
+- **Frontend:** `http://localhost:3000/adminlogin.html`
+- **Dashboard:** `http://localhost:3000/admin-dashboard.html`
+
+#### 4. Get All Users
+- **URL:** `GET /api/auth/users`
 - **Headers:** `Authorization: Bearer <token>`
 - **Response:** User profile data
 
@@ -133,6 +168,7 @@ f5-hotel/
   contactNumber: String (required),
   username: String (required, unique),
   password: String (hashed, required),
+  isAdmin: Boolean (default: false),
   createdAt: Date,
   lastLogin: Date
 }
@@ -158,7 +194,24 @@ f5-hotel/
 - Stores JWT token and user data
 - Validates credentials with MongoDB
 
+## Creating the Admin Account
+
+To create the admin account, run:
+```powershell
+node create-admin.js
+```
+
+This will create an admin user with the following credentials:
+- **Username:** AdminUser
+- **Email:** admin@gmail.com
+- **Password:** admin12345
+- **Admin Access:** Yes
+
+**Note:** You can also create the admin account via Postman using the signup endpoint and then manually setting `isAdmin: true` in MongoDB Atlas.
+
 ## Testing the Application
+
+### For Regular Users:
 
 1. **Start the server:**
    ```powershell
@@ -176,6 +229,23 @@ f5-hotel/
 
 5. **Check MongoDB:**
    View your data in MongoDB Atlas dashboard
+
+### For Administrators:
+
+1. **Create admin account:**
+   ```powershell
+   node create-admin.js
+   ```
+
+2. **Admin Login:**
+   Navigate to `http://localhost:3000/adminlogin.html`
+
+3. **Use admin credentials:**
+   - Username: AdminUser
+   - Password: admin12345
+
+4. **Access dashboard:**
+   After login, you'll be redirected to `http://localhost:3000/admin-dashboard.html`
 
 ## MongoDB Atlas Dashboard
 - **Cluster:** ForensicFive
@@ -200,13 +270,37 @@ f5-hotel/
 - Check browser console for CORS errors
 - Verify API URL in `signup.js` and `login.js`
 
+## Admin Features
+
+### Admin Dashboard
+The admin dashboard (`admin-dashboard.html`) includes:
+- ✓ User statistics overview
+- ✓ List of all registered users
+- ✓ Admin and regular user identification
+- ✓ Quick actions menu
+- ✓ Secure access (admin-only)
+
+### Admin Login Security
+- ✓ Separate admin login endpoint (`/api/auth/admin-login`)
+- ✓ Role-based access control (checks `isAdmin` field)
+- ✓ Non-admin users are denied access with 403 error
+- ✓ All admin access attempts are logged
+- ✓ JWT tokens include admin flag for verification
+
+### Admin Access URLs
+- **Admin Login:** `http://localhost:3000/adminlogin.html`
+- **Admin Dashboard:** `http://localhost:3000/admin-dashboard.html`
+- **View Users:** `http://localhost:3000/view-users.html`
+
 ## Next Steps (Optional Enhancements)
 - [ ] Add booking functionality
 - [ ] Create room management system
 - [ ] Implement password reset
 - [ ] Add email verification
-- [ ] Create admin dashboard
+- [✓] Create admin dashboard
 - [ ] Add booking history
+- [ ] Add admin user management (delete/edit users)
+- [ ] Add activity logs
 
 ## Support
 For MongoDB Atlas issues, visit: https://www.mongodb.com/docs/atlas/

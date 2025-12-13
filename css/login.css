@@ -156,6 +156,44 @@ body {
             font-family: 'Open Sans', sans-serif;
         }
 
+        .password-group {
+            position: relative;
+        }
+
+        .password-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-input-wrapper input {
+            padding-right: 50px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #707079;
+            font-size: 16px;
+            padding: 5px;
+            transition: color 0.3s;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-password:hover {
+            color: #dfa974;
+        }
+
+        .toggle-password i {
+            font-size: 18px;
+        }
+
         @media (max-width: 768px) {
             .login-container {
                 padding: 30px 20px;

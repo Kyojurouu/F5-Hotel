@@ -16,7 +16,6 @@ const signupValidation = [
 ];
 
 const loginValidation = [
-    body('email').isEmail().normalizeEmail(),
     body('username').trim().notEmpty(),
     body('password').notEmpty()
 ];
@@ -80,7 +79,8 @@ router.post('/signup', signupValidation, async (req, res) => {
                 username: user.username,
                 email: user.email,
                 firstName: user.firstName,
-                lastName: user.lastName
+                lastName: user.lastName,
+                contactNumber: user.contactNumber
             }
         });
 
@@ -107,11 +107,10 @@ router.post('/login', loginValidation, async (req, res) => {
             });
         }
 
-        const { email, username, password } = req.body;
+        const { username, password } = req.body;
 
-        // Find user by email and username (both required)
+        // Find user by username
         const user = await User.findOne({ 
-            email,
             username
         });
 
@@ -151,7 +150,8 @@ router.post('/login', loginValidation, async (req, res) => {
                 username: user.username,
                 email: user.email,
                 firstName: user.firstName,
-                lastName: user.lastName
+                lastName: user.lastName,
+                contactNumber: user.contactNumber
             }
         });
 
@@ -160,6 +160,86 @@ router.post('/login', loginValidation, async (req, res) => {
         res.status(500).json({ 
             success: false, 
             message: 'Server error during login',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+});
+
+// Admin login - Only for admin accounts
+router.post('/admin-login', loginValidation, async (req, res) => {
+    try {
+        // Check validation errors
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Validation failed',
+                errors: errors.array() 
+            });
+        }
+
+        const { username, password } = req.body;
+
+        // Find user by username
+        const user = await User.findOne({ 
+            username
+        });
+
+        if (!user) {
+            return res.status(401).json({ 
+                success: false, 
+                message: 'Invalid admin credentials' 
+            });
+        }
+
+        // Check if user is an admin
+        if (!user.isAdmin) {
+            return res.status(403).json({ 
+                success: false, 
+                message: 'Access denied. Admin privileges required.' 
+            });
+        }
+
+        // Check password
+        const isPasswordValid = await user.comparePassword(password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ 
+                success: false, 
+                message: 'Invalid admin credentials' 
+            });
+        }
+
+        // Update last login
+        user.lastLogin = new Date();
+        await user.save();
+
+        // Generate JWT token with admin flag
+        const token = jwt.sign(
+            { userId: user._id, username: user.username, isAdmin: true },
+            process.env.JWT_SECRET,
+            { expiresIn: '7d' }
+        );
+
+        res.status(200).json({
+            success: true,
+            message: 'Admin login successful',
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                contactNumber: user.contactNumber,
+                isAdmin: user.isAdmin
+            }
+        });
+
+    } catch (error) {
+        console.error('Admin login error:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Server error during admin login',
             error: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }
