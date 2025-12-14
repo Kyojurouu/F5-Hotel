@@ -45,7 +45,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('userData', JSON.stringify(data.user || {}));
                 sessionStorage.setItem('userLoggedIn', 'true');
                 sessionStorage.setItem('username', (data.user && data.user.username) || username);
-                window.location.href = 'home.html';
+                
+                // Redirect based on admin status
+                if (data.user && data.user.isAdmin) {
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    window.location.href = 'home.html';
+                }
             } else {
                 alert('Login failed: ' + (data?.message || 'Unknown'));
             }

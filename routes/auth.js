@@ -195,7 +195,8 @@ router.post('/login', loginValidation, async (req, res) => {
                 email: user.email,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                contactNumber: user.contactNumber
+                contactNumber: user.contactNumber,
+                isAdmin: user.isAdmin || false
             }
         });
     } catch (error) {

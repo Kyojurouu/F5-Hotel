@@ -189,6 +189,11 @@
                         <span>Ayala Center, San Lorenzo, Makati City, Metro Manila, 1223</span>
                     </div>
                     <div class="top-info">
+                        <span id="userName" style="color: #ffffff; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 600; margin-right: 20px; background: rgba(255, 255, 255, 0.1); padding: 8px 15px; border-radius: 20px; display: inline-block;">
+                            <i class="fas fa-user" style="margin-right: 8px;"></i>User
+                        </span>
+                    </div>
+                    <div class="top-info">
                         <a href="#" id="logoutBtn" style="color: #dfa974; text-decoration: none; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 600;"><i class="fas fa-sign-out-alt"></i> Logout</a>
                     </div>
                 </div>
@@ -198,6 +203,7 @@
                             <li><a href="./home.html">Home</a></li>
                             <li><a href="./about-us.html">About</a></li>
                             <li><a href="./rooms.html">Rooms</a></li>
+                            <li><a href="./user-bookings.html">Reservations</a></li>
                             <li><a href="./contact.html">Contact</a></li>
                         </ul>
                     </nav>
@@ -217,7 +223,7 @@
             
             <div class="booking-form-container">
                 <div class="booking-form-title">
-                    <h2>Complete Your Booking</h2>
+                    <h2>Complete Your Reservation</h2>
                     <p class="room-type" id="roomTypeName">Standard Room</p>
                 </div>
 
@@ -470,7 +476,7 @@
     document.getElementById('numRooms').addEventListener('change', calculateTotal);
 
     // Form submission
-    document.getElementById('bookingForm').addEventListener('submit', function(e) {
+    document.getElementById('bookingForm').addEventListener('submit', async function(e) {
         e.preventDefault();
 
         const checkIn = new Date(document.getElementById('checkInDate').value);
@@ -481,33 +487,69 @@
             return;
         }
 
-        // Get form data
+        // Get user data
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        const userId = userData.id || userData._id;
+
+        if (!userId) {
+            alert('Please login to make a booking');
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // Get room details
+        const urlParams = new URLSearchParams(window.location.search);
+        const roomType = urlParams.get('room') || 'standard';
+        const room = roomTypes[roomType];
+
+        // Calculate nights and total
+        const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+        const numRooms = parseInt(document.getElementById('numRooms').value) || 1;
+        const totalPrice = room.price * nights * numRooms;
+
+        // Prepare booking data
         const bookingData = {
-            fullName: document.getElementById('fullName').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            numGuests: document.getElementById('numGuests').value,
+            userId: userId,
+            userName: document.getElementById('fullName').value,
+            userEmail: document.getElementById('email').value,
+            userPhone: document.getElementById('phone').value,
+            roomType: room.name,
             checkInDate: document.getElementById('checkInDate').value,
             checkOutDate: document.getElementById('checkOutDate').value,
-            numRooms: document.getElementById('numRooms').value,
-            specialRequests: document.getElementById('specialRequests').value,
-            roomType: document.getElementById('summaryRoomType').textContent,
-            totalAmount: document.getElementById('totalAmount').textContent
+            numberOfGuests: parseInt(document.getElementById('numGuests').value),
+            numberOfRooms: numRooms,
+            pricePerNight: room.price,
+            specialRequests: document.getElementById('specialRequests').value
         };
 
-        // Store booking data
-        let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
-        bookings.push({
-            ...bookingData,
-            bookingId: 'BK' + Date.now(),
-            bookingDate: new Date().toISOString(),
-            status: 'Confirmed'
-        });
-        localStorage.setItem('bookings', JSON.stringify(bookings));
+        try {
+            const response = await fetch('/api/bookings/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(bookingData)
+            });
 
-        alert('Booking confirmed successfully! Booking ID: BK' + Date.now());
-        window.location.href = 'home.html';
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                alert('Booking confirmed successfully! Total: ₱' + totalPrice.toLocaleString());
+                window.location.href = 'home.html';
+            } else {
+                alert('Booking failed: ' + (data.message || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error('Booking error:', error);
+            alert('Error making booking. Please ensure the server is running.');
+        }
     });
+
+    // Display user name
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    if (userData.firstName || userData.username) {
+        document.getElementById('userName').innerHTML = `<i class="fas fa-user"></i> ${userData.firstName || userData.username}`;
+    }
 
     // Logout functionality
     document.getElementById('logoutBtn').addEventListener('click', function(e) {

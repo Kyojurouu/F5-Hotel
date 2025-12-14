@@ -6,6 +6,7 @@ const path = require('path');
 
 // Import routes
 const authRoutes = require('./routes/auth');
+const bookingRoutes = require('./routes/bookings');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(express.static(path.join(__dirname)));
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/bookings', bookingRoutes);
 
 // MongoDB Connection (accept both MONGODB_URI and MONGO_URI for convenience)
 const mongoURI = process.env.MONGODB_URI || process.env.MONGO_URI;

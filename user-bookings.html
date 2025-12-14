@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservations - F5 Hotel</title>
+    
+    <link href="https://fonts.googleapis.com/css?family=Taviraj:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/linearicons.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    
+    <style>
+        .bookings-section {
+            padding: 150px 0 80px;
+            min-height: 100vh;
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .page-title h1 {
+            font-size: 48px;
+            color: #19191a;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .page-title .booking-count {
+            color: #dfa974;
+            font-size: 18px;
+        }
+        
+        .booking-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .booking-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+        }
+        
+        .booking-header {
+            background: linear-gradient(135deg, #dfa974 0%, #c79861 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .booking-id {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .status-badge {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .status-pending { background: #ffc107; color: #000; }
+        .status-confirmed { background: #28a745; color: #fff; }
+        .status-cancelled { background: #dc3545; color: #fff; }
+        .status-completed { background: #6c757d; color: #fff; }
+        
+        .booking-body {
+            padding: 30px;
+        }
+        
+        .booking-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: start;
+        }
+        
+        .detail-item i {
+            color: #dfa974;
+            font-size: 20px;
+            margin-right: 12px;
+            margin-top: 2px;
+        }
+        
+        .detail-content h4 {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            margin: 0 0 5px 0;
+            letter-spacing: 1px;
+        }
+        
+        .detail-content p {
+            font-size: 16px;
+            color: #19191a;
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .booking-footer {
+            border-top: 1px solid #eee;
+            padding: 20px 30px;
+            background: #f9f9f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .total-price {
+            font-size: 24px;
+            color: #dfa974;
+            font-weight: 700;
+        }
+        
+        .no-bookings {
+            text-align: center;
+            padding: 80px 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        
+        .no-bookings i {
+            font-size: 80px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .no-bookings h3 {
+            font-size: 24px;
+            color: #19191a;
+            margin-bottom: 10px;
+        }
+        
+        .no-bookings p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 100px 20px;
+            font-size: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <header class="header-section other-page">
+        <div class="container-fluid">
+            <div class="inner-header">
+                <div class="logo">
+                    <a href="./home.html" style="font-family: 'Taviraj', serif; font-size: 32px; font-weight: 700; color: #dfa974; text-decoration: none; text-transform: uppercase; letter-spacing: 3px;">F5 HOTEL</a>
+                </div>
+                <div class="top-widget">
+                    <div class="top-info address">
+                        <img src="img/placeholder.png" alt="">
+                        <span>Ayala Center, San Lorenzo, Makati City, Metro Manila, 1223</span>
+                    </div>
+                    <div class="top-info">
+                        <span id="userName" style="color: #ffffff; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 600; margin-right: 20px; background: rgba(255, 255, 255, 0.1); padding: 8px 15px; border-radius: 20px; display: inline-block;">
+                            <i class="fas fa-user" style="margin-right: 8px;"></i>User
+                        </span>
+                    </div>
+                    <div class="top-info">
+                        <a href="#" id="logoutBtn" style="color: #dfa974; text-decoration: none; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 600;">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+                <div class="container">
+                    <nav class="main-menu mobile-menu">
+                        <ul>
+                            <li><a href="./home.html">Home</a></li>
+                            <li><a href="./about-us.html">About</a></li>
+                            <li><a href="./rooms.html">Rooms</a></li>
+                            <li class="active"><a href="./user-bookings.html">Reservations</a></li>
+                            <li><a href="./contact.html">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section Begin -->
+    <section class="hero-section set-bg" data-setbg="img/rooms-bg.jpg">
+        <div class="hero-text">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>Reservations</h1>
+                    </div>
+                </div>
+                <div class="page-nav">
+                    <a href="./rooms.html" class="left-nav"><i class="lnr lnr-arrow-left"></i> Rooms</a>
+                    <a href="./contact.html" class="right-nav">Contact <i class="lnr lnr-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Section End -->
+
+    <section class="bookings-section">
+        <div class="container">
+            <div class="page-title">
+                <p class="booking-count" id="bookingCount">Loading...</p>
+            </div>
+            
+            <div id="bookingsContainer">
+                <div class="loading">
+                    <i class="fa fa-spinner fa-spin"></i> Loading your reservations...
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+    
+    <script>
+        // Check if user is logged in
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        const userId = userData.id || userData._id;
+        
+        if (!userId) {
+            alert('Please login to view your reservations');
+            window.location.href = 'login.html';
+        }
+
+        // Display user name
+        document.getElementById('userName').innerHTML = `<i class="fas fa-user" style="margin-right: 8px;"></i>${userData.firstName || userData.username || 'User'}`;
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric'
+            });
+        }
+
+        // Load user bookings
+        async function loadBookings() {
+            const container = document.getElementById('bookingsContainer');
+
+            try {
+                const response = await fetch(`/api/bookings/user/${userId}`);
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    displayBookings(data.bookings);
+                } else {
+                    container.innerHTML = '<div class="no-bookings"><i class="fa fa-calendar-times"></i><h3>Error Loading Reservations</h3><p>' + (data.message || 'Unknown error') + '</p></div>';
+                }
+            } catch (error) {
+                console.error('Error fetching bookings:', error);
+                container.innerHTML = '<div class="no-bookings"><i class="fa fa-exclamation-triangle"></i><h3>Error</h3><p>Unable to load reservations. Please make sure the server is running.</p></div>';
+            }
+        }
+
+        function displayBookings(bookings) {
+            const container = document.getElementById('bookingsContainer');
+            
+            if (!bookings || bookings.length === 0) {
+                container.innerHTML = `
+                    <div class="no-bookings">
+                        <i class="fa fa-calendar-times"></i>
+                        <h3>No Reservations Yet</h3>
+                        <p>You haven't made any reservations. Start exploring our rooms!</p>
+                        <a href="rooms.html" class="primary-btn">Browse Rooms</a>
+                    </div>
+                `;
+                document.getElementById('bookingCount').textContent = '0 Reservations';
+                return;
+            }
+
+            document.getElementById('bookingCount').textContent = `${bookings.length} ${bookings.length === 1 ? 'Reservation' : 'Reservations'}`;
+
+            let html = '';
+            bookings.forEach(booking => {
+                const status = (booking.status || 'Pending').toLowerCase();
+                const statusClass = `status-${status}`;
+                
+                html += `
+                    <div class="booking-card">
+                        <div class="booking-header">
+                            <div class="booking-id">
+                                <i class="fa fa-bed"></i> ${booking.roomType}
+                            </div>
+                            <span class="status-badge ${statusClass}">${booking.status || 'Pending'}</span>
+                        </div>
+                        <div class="booking-body">
+                            <div class="booking-details">
+                                <div class="detail-item">
+                                    <i class="fa fa-calendar-check"></i>
+                                    <div class="detail-content">
+                                        <h4>Check-In</h4>
+                                        <p>${formatDate(booking.checkInDate)}</p>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fa fa-calendar-times"></i>
+                                    <div class="detail-content">
+                                        <h4>Check-Out</h4>
+                                        <p>${formatDate(booking.checkOutDate)}</p>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fa fa-users"></i>
+                                    <div class="detail-content">
+                                        <h4>Guests</h4>
+                                        <p>${booking.numberOfGuests} ${booking.numberOfGuests === 1 ? 'Guest' : 'Guests'}</p>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fa fa-door-open"></i>
+                                    <div class="detail-content">
+                                        <h4>Rooms</h4>
+                                        <p>${booking.numberOfRooms} ${booking.numberOfRooms === 1 ? 'Room' : 'Rooms'}</p>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fa fa-moon"></i>
+                                    <div class="detail-content">
+                                        <h4>Nights</h4>
+                                        <p>${booking.totalNights} ${booking.totalNights === 1 ? 'Night' : 'Nights'}</p>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fa fa-calendar"></i>
+                                    <div class="detail-content">
+                                        <h4>Booked On</h4>
+                                        <p>${formatDate(booking.createdAt)}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            ${booking.specialRequests ? `
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                                <h4 style="font-size: 12px; color: #666; text-transform: uppercase; margin-bottom: 8px;">
+                                    <i class="fa fa-comment"></i> Special Requests
+                                </h4>
+                                <p style="color: #19191a; margin: 0;">${booking.specialRequests}</p>
+                            </div>
+                            ` : ''}
+                        </div>
+                        <div class="booking-footer">
+                            <div>
+                                <small style="color: #666; display: block; margin-bottom: 5px;">Total Amount</small>
+                                <div class="total-price">₱${booking.totalPrice.toLocaleString()}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Load bookings on page load
+        loadBookings();
+    </script>
+</body>
+</html>

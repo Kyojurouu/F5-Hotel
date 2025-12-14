@@ -48,6 +48,11 @@
                         <span>Ayala Center, San Lorenzo, Makati City, Metro Manila, 1223</span>
                     </div>
                     <div class="top-info">
+                        <span id="userName" style="color: #ffffff; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 600; margin-right: 20px; background: rgba(255, 255, 255, 0.1); padding: 8px 15px; border-radius: 20px; display: inline-block;">
+                            <i class="fas fa-user" style="margin-right: 8px;"></i>User
+                        </span>
+                    </div>
+                    <div class="top-info">
                         <a href="#" id="logoutBtn" style="color: #dfa974; text-decoration: none; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 600;"><i class="fas fa-sign-out-alt"></i> Logout</a>
                     </div>
                 </div>
@@ -57,6 +62,7 @@
                             <li><a href="./home.html">Home</a></li>
                             <li><a href="./about-us.html">About</a></li>
                             <li><a href="./rooms.html">Rooms</a></li>
+                            <li><a href="./user-bookings.html">Reservations</a></li>
                             <li><a href="./contact.html">Contact</a></li>
                         </ul>
                     </nav>
@@ -76,7 +82,7 @@
                     </div>
                 </div>
                 <div class="page-nav">
-                    <a href="./rooms.html" class="left-nav"><i class="lnr lnr-arrow-left"></i> Rooms</a>
+                    <a href="./user-bookings.html" class="left-nav"><i class="lnr lnr-arrow-left"></i> Reservations</a>
                 </div>
             </div>
         </div>
@@ -206,6 +212,12 @@
             window.location.href = 'login.html';
         }
     };
+
+    // Display user name
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    if (userData.firstName || userData.username) {
+        document.getElementById('userName').innerHTML = `<i class="fas fa-user"></i> ${userData.firstName || userData.username}`;
+    }
 
     // Logout functionality with confirmation
     document.getElementById('logoutBtn').addEventListener('click', function(e) {
