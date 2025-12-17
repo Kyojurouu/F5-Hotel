@@ -139,7 +139,17 @@ router.get('/all', verifyAdminToken, async (req, res) => {
 // Get user's bookings
 router.get('/user/:userId', async (req, res) => {
     try {
-        const bookings = await Booking.find({ userId: req.params.userId })
+        const userId = req.params.userId;
+        
+        // Validate userId
+        if (!userId || userId === 'undefined' || userId === 'null') {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid user ID. Please login again.'
+            });
+        }
+        
+        const bookings = await Booking.find({ userId: userId })
             .sort({ createdAt: -1 });
 
         res.status(200).json({

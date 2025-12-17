@@ -198,7 +198,7 @@
                             <li><a href="./about-us.html">About</a></li>
                             <li><a href="./rooms.html">Rooms</a></li>
                             <li class="active"><a href="./user-bookings.html">Reservations</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
+                            <li><a href="./contact.html">Profile</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -217,7 +217,7 @@
                 </div>
                 <div class="page-nav">
                     <a href="./rooms.html" class="left-nav"><i class="lnr lnr-arrow-left"></i> Rooms</a>
-                    <a href="./contact.html" class="right-nav">Contact <i class="lnr lnr-arrow-right"></i></a>
+                    <a href="./contact.html" class="right-nav">Profile <i class="lnr lnr-arrow-right"></i></a>
                 </div>
             </div>
         </div>
@@ -247,7 +247,10 @@
         const userData = JSON.parse(localStorage.getItem('userData') || '{}');
         const userId = userData.id || userData._id;
         
-        if (!userId) {
+        console.log('User Data:', userData);
+        console.log('User ID:', userId);
+        
+        if (!userId || userId === 'undefined') {
             alert('Please login to view your reservations');
             window.location.href = 'login.html';
         }

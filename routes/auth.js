@@ -323,6 +323,95 @@ router.get('/profile', async (req, res) => {
     }
 });
 
+// Update own profile (regular users)
+router.put('/profile', updateUserValidation, async (req, res) => {
+    try {
+        const token = req.headers.authorization?.split(' ')[1];
+        
+        if (!token) {
+            return res.status(401).json({ 
+                success: false, 
+                message: 'No token provided' 
+            });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+        // Check validation errors
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Validation failed',
+                errors: errors.array() 
+            });
+        }
+
+        const updateData = req.body;
+
+        // Don't allow password or isAdmin update through this endpoint
+        delete updateData.password;
+        delete updateData.isAdmin;
+
+        // Check if email already exists (if being updated)
+        if (updateData.email) {
+            const existingUser = await User.findOne({
+                _id: { $ne: decoded.userId },
+                email: updateData.email
+            });
+
+            if (existingUser) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Email already registered'
+                });
+            }
+        }
+
+        // Check if username already exists (if being updated)
+        if (updateData.username) {
+            const existingUser = await User.findOne({
+                _id: { $ne: decoded.userId },
+                username: updateData.username
+            });
+
+            if (existingUser) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Username already taken'
+                });
+            }
+        }
+
+        // Find and update user
+        const user = await User.findByIdAndUpdate(
+            decoded.userId,
+            { $set: updateData },
+            { new: true, runValidators: true }
+        ).select('-password');
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Profile updated successfully',
+            user
+        });
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Error updating profile',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+});
+
 // Get all users (admin only)
 router.get('/users', verifyAdminToken, async (req, res) => {
     try {

@@ -431,9 +431,10 @@
                     <a href="./admin-dashboard.html" style="font-family: 'Taviraj', serif; font-size: 32px; font-weight: 700; color: #dfa974; text-decoration: none; text-transform: uppercase; letter-spacing: 3px;">F5 HOTEL</a>
                 </div>
                 <div class="top-widget">
-                    <div class="top-info address">
-                        <div class="admin-avatar" id="adminAvatar">A</div>
-                        <span id="adminNameHeader">Administrator</span>
+                    <div class="top-info">
+                        <span id="adminNameHeader" style="color: #ffffff; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 600; margin-right: 20px; background: rgba(255, 255, 255, 0.1); padding: 8px 15px; border-radius: 20px; display: inline-block;">
+                            <i class="fas fa-user" style="margin-right: 8px;"></i>Administrator
+                        </span>
                     </div>
                     <div class="top-info">
                         <a href="#" id="logoutBtn" style="color: #dfa974; text-decoration: none; font-family: 'Open Sans', sans-serif; font-size: 14px; font-weight: 600;">
@@ -590,7 +591,7 @@
                     const fullName = admin.firstName + ' ' + admin.lastName;
                     const initials = (admin.firstName[0] + admin.lastName[0]).toUpperCase();
                     
-                    document.getElementById('adminNameHeader').textContent = fullName;
+                    document.getElementById('adminNameHeader').innerHTML = '<i class="fas fa-user" style="margin-right: 8px;"></i>' + fullName;
                     document.getElementById('adminAvatar').textContent = initials;
                 } catch (e) {
                     console.error('Error loading admin data:', e);
