@@ -1,3 +1,7 @@
+const dns = require('dns').promises;
+// Fix DNS issue - use Google DNS to resolve MongoDB SRV records
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const User = require('./models/User');
